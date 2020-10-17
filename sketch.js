@@ -111,11 +111,13 @@ function getScore()
         else if(particle.body.position.x > 321 && particle.body.position.x < 560)
         {
           score = score + 200;
+          particle=null;
           if ( turn >= 5) gameState ="end";
         }
         else if(particle.body.position.x > 561 && particle.body.position.x < 780)
         {
           score = score + 100;
+          particle=null;
           if ( turn >= 5) gameState ="end";
         }
     }
