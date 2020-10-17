@@ -7,21 +7,23 @@ var particles = [];
 var plinkos = [];
 var divisions = [];
 var particle;
-var turn =0;
-var points = [];
+var points = [500,500,500,500,200,200,200,100,100,100];
 
 var divisionHeight=300;
 var score =0;
+var turn =0;
+var gameState = "start";
+
 function setup() {
   createCanvas(800, 800);
   engine = Engine.create();
   world = engine.world;
   ground = new Ground(width/2,height,width,20);
 
-   var randomPoint = Math.round(random(100,500));
+  // var randomPoint = Math.round(random(100,500));
    for (var k = 0; k <=width; k = k + 80) {
      divisions.push(new Divisions(k, height-divisionHeight/2, 10, divisionHeight));
-     points.push(randomPoint);
+     //points.push(randomPoint);
    }
 
 
@@ -65,14 +67,17 @@ function draw() {
      plinkos[i].display();
      
    }
-   if(frameCount%60===0){
+  /* if(frameCount%60===0){
      particles.push(new Particle(random(width/2-30, width/2+30), 10,10));
-     score++;
+     //score++;
    }
  
   for (var j = 0; j < particles.length; j++) { 
      particles[j].display();
-   }
+    // getScore();
+   }*/
+
+   score = getScore();
 
    var divisionX = 0;
    for (var k = 0; k < divisions.length; k++) {    
@@ -83,4 +88,48 @@ function draw() {
      divisionX = divisionX + 82;
    }
 
+   text(mouseX +"," +mouseY, mouseX,mouseY);
+
+   if ( gameState === "end") {
+    
+    textSize(100);
+    text("GameOver", 150, 250);
+  }
+}
+
+function getScore()
+{
+  if(particle!=null){
+    particle.display();
+    if(particle.body.position. y > 500){
+        if(particle.body.position.x < 320)
+        {
+          score = score + 500;
+          particle=null;
+          if ( turn >= 5) gameState ="end";
+        }
+        else if(particle.body.position.x > 321 && particle.body.position.x < 560)
+        {
+          score = score + 200;
+          if ( turn >= 5) gameState ="end";
+        }
+        else if(particle.body.position.x > 561 && particle.body.position.x < 780)
+        {
+          score = score + 100;
+          if ( turn >= 5) gameState ="end";
+        }
+    }
+  }
+
+  return score;
+}
+
+function mousePressed()
+{
+  console.log(gameState);
+  if(gameState!=="end")
+  {
+     turn++;
+     particle= new Particle(mouseX, 10, 10, 10); 
+  }   
 }
